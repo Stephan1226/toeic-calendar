@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>토익 30일 챌린지 캘린더</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .day-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .day-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+        }
+        
+        .day-card.checked {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .day-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+        }
+        
+        input[type="text"],
+        input[type="url"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.95em;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="url"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        .notion-link {
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+        
+        .notion-link a {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        
+        .notion-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 토익 30일 챌린지 캘린더</h1>
+        <div class="calendar">
+            {% for day in range(1, 31) %}
+            {% set day_str = day|string %}
+            {% set day_data = days[day_str] %}
+            <div class="day-card {% if day_data.checked %}checked{% endif %}">
+                <form method="post" action="/update/{{ day }}">
+                    <div class="day-header">
+                        <div class="day-number">Day {{ day }}</div>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" 
+                                   name="checked" 
+                                   id="check-{{ day }}"
+                                   {% if day_data.checked %}checked{% endif %}
+                                   onchange="this.form.submit()">
+                            <label for="check-{{ day }}" style="margin: 0; font-weight: normal;">완료</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="source-{{ day }}">📚 학습 소스</label>
+                        <input type="text" 
+                               name="source" 
+                               id="source-{{ day }}"
+                               value="{{ day_data.source }}"
+                               placeholder="예: 파트5 문제 50개">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notion-{{ day }}">🔗 노션 페이지 링크</label>
+                        <input type="url" 
+                               name="notion_link" 
+                               id="notion-{{ day }}"
+                               value="{{ day_data.notion_link }}"
+                               placeholder="https://notion.so/...">
+                    </div>
+                    
+                    <button type="submit">저장</button>
+                    
+                    {% if day_data.notion_link %}
+                    <div class="notion-link">
+                        <a href="{{ day_data.notion_link }}" target="_blank">📝 활동 기록 보기 →</a>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
