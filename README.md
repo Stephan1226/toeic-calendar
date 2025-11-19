@@ -2,59 +2,59 @@
 
 FastAPI, Jinja2, MySQL을 사용한 토익 학습 추적 웹 애플리케이션입니다.
 
-## 설치 방법
+## 설치 및 실행 (Docker 사용 - 추천)
 
-### 1. 자동 설치 (추천)
+### 1. Docker Desktop 실행
+
+먼저 Docker Desktop을 실행하세요.
+
+### 2. 앱 시작
+
+```bash
+docker-compose up -d
+```
+
+이게 끝입니다! 브라우저에서 http://localhost:8000 접속하세요.
+
+### 3. 앱 중지
+
+```bash
+docker-compose down
+```
+
+### 4. 로그 확인
+
+```bash
+docker-compose logs -f web
+```
+
+Docker Desktop에서 `toeic_calendar_mysql`과 `toeic_calendar_web` 컨테이너를 확인할 수 있습니다.
+
+---
+
+## 로컬 개발 (Docker 없이)
+
+### 설치
 
 ```bash
 chmod +x setup.sh
 ./setup.sh
 ```
 
-### 2. 수동 설치
-
-```bash
-# 가상환경 생성
-python3 -m venv venv
-
-# 가상환경 활성화
-source venv/bin/activate
-
-# 패키지 설치
-pip install -r requirements.txt
-
-# 환경 변수 설정
-cp .env.example .env
-# .env 파일을 열어서 MySQL 정보 입력
-```
-
-## MySQL 설정
+### MySQL 설정
 
 ```sql
 CREATE DATABASE toeic_calendar;
 ```
 
-`.env` 파일에서 MySQL 접속 정보를 수정하세요:
+`.env` 파일에서 MySQL 접속 정보를 수정하세요.
 
-```
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=toeic_calendar
-```
-
-## 실행 방법
+### 실행
 
 ```bash
-# 가상환경 활성화 (매번 실행 시)
 source venv/bin/activate
-
-# 서버 실행
 uvicorn main:app --reload
 ```
-
-브라우저에서 http://localhost:8000 접속
 
 ## 기능
 
